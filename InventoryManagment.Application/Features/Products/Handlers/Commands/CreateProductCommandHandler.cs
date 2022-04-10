@@ -32,7 +32,7 @@ namespace InventoryManagment.Application.Features.Products.Handlers.Commands
                 };
 
             var product = _mapper.Map<Product>(request.ProductDto);
-            await _productRepository.Add(product);
+            await _productRepository.AddAsync(product);
 
             return new CommandResponse()
             {

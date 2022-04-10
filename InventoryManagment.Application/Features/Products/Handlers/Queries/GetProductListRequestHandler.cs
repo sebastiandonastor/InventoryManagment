@@ -19,7 +19,7 @@ namespace InventoryManagment.Application.Features.Products.Queries
 
         public async Task<List<ProductDto>> Handle(GetProductListRequest request, CancellationToken cancellationToken)
         {
-           return _mapper.Map<List<ProductDto>>(await _productRepository.GetAll());
+           return _mapper.Map<List<ProductDto>>(await _productRepository.GetAllAsync());
         }
     }
 }

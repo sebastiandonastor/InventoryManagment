@@ -20,7 +20,7 @@ namespace InventoryManagment.Application.Features.Vendors.Handlers.Commands
         {
             var vendor = _mapper.Map<Vendor>(request.VendorDto);
 
-            await _vendorRepository.Add(vendor);
+            await _vendorRepository.AddAsync(vendor);
 
             return vendor.Id;
         }

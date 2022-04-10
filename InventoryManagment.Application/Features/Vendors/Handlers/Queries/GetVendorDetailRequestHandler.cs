@@ -20,7 +20,7 @@ namespace InventoryManagment.Application.Features.Vendors.Handlers.Queries
 
         public async Task<VendorDto> Handle(GetVendorDetailRequest request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<VendorDto>(await _vendorRepository.Get(request.Id));
+            return _mapper.Map<VendorDto>(await _vendorRepository.GetAsync(request.Id));
 
         }
     }

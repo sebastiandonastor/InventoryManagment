@@ -6,6 +6,11 @@
         Task<IReadOnlyList<T>> GetAll();
         Task<T> Add(T entity);
         Task<T> Update(T entity);
-        Task Delete(int id);
+        Task Delete(T entity);
+        Task<T> GetAsync(int id);
+        Task<IReadOnlyList<T>> GetAllAsync();
+        Task<T> AddAsync(T entity);
+        Task<T> UpdateAsync(T entity);
+        Task DeleteAsync(T entity);
     }
 }
