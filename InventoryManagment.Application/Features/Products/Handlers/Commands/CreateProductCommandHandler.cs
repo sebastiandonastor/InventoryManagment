@@ -21,7 +21,7 @@ namespace InventoryManagment.Application.Features.Products.Handlers.Commands
         public async Task<CommandResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             var validator = new CreateProductValidator();
-            var validationResult = await validator.ValidateAsync(request.Product);
+            var validationResult = await validator.ValidateAsync(request.ProductDto);
 
             if (!validationResult.IsValid)
                 return new CommandResponse()
@@ -31,7 +31,7 @@ namespace InventoryManagment.Application.Features.Products.Handlers.Commands
                     Message = "Creation Failed"
                 };
 
-            var product = _mapper.Map<Product>(request.Product);
+            var product = _mapper.Map<Product>(request.ProductDto);
             await _productRepository.Add(product);
 
             return new CommandResponse()

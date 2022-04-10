@@ -6,6 +6,6 @@ namespace InventoryManagment.Application.Features.Products.Requests.Commands
 {
     public class CreateProductCommand : IRequest<CommandResponse>
     {
-        public ProductDto Product { get; set; } = null!;
+        public ProductDto ProductDto { get; set; } = null!;
     }
 }
