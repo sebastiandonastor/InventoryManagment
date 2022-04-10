@@ -12,5 +12,10 @@
         Task<T> AddAsync(T entity);
         Task<T> UpdateAsync(T entity);
         Task DeleteAsync(T entity);
+        bool Exist(int id);
+        bool Any(Func<T, bool> func);
+        Task<bool> ExistAsync(int id);
+        Task<bool> AnyAsync(Func<T, bool> func);
+
     }
 }
