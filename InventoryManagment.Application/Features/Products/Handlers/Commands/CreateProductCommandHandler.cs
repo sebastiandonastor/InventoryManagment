@@ -20,7 +20,7 @@ namespace InventoryManagment.Application.Features.Products.Handlers.Commands
         }
         public async Task<CommandResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var validator = new CreateProductValidator();
+            var validator = new CreateProductValidator(_productRepository);
             var validationResult = await validator.ValidateAsync(request.ProductDto);
 
             if (!validationResult.IsValid)
