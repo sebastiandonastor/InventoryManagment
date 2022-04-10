@@ -7,12 +7,10 @@ namespace InventoryManagment.Application.Features.Products.Handlers.Commands
 {
     public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, Unit>
     {
-        private readonly IMapper _mapper;
         private readonly IProductRepository _productRepository;
 
-        public DeleteProductCommandHandler(IMapper mapper, IProductRepository productRepository)
+        public DeleteProductCommandHandler(IProductRepository productRepository)
         {
-            _mapper = mapper;
             _productRepository = productRepository;
         }
 
