@@ -19,7 +19,7 @@ namespace InventoryManagment.Application.Features.Products.Handlers.Commands
         {
             var product = await _productRepository.GetAsync(request.Id);
 
-            if (product == null)
+            if (product is null)
                 throw new NotFoundException(nameof(product), request.Id);
 
             await _productRepository.DeleteAsync(product);

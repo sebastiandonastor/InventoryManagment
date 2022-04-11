@@ -1,4 +1,5 @@
-﻿using InventoryManagment.Application.Features.Vendors.Requests.Commands;
+﻿using InventoryManagment.Application.Exceptions;
+using InventoryManagment.Application.Features.Vendors.Requests.Commands;
 using InventoryManagment.Application.Persistence.Contracts;
 using MediatR;
 
@@ -15,9 +16,12 @@ namespace InventoryManagment.Application.Features.Products.Handlers.Commands
 
         public async Task<Unit> Handle(DeleteVendorCommand request, CancellationToken cancellationToken)
         {
-            var product = await _vendorRepository.GetAsync(request.Id);
+            var vendor = await _vendorRepository.GetAsync(request.Id);
+            
+            if (vendor is null)
+                throw new NotFoundException(nameof(vendor), request.Id);
 
-            await _vendorRepository.DeleteAsync(product);
+            await _vendorRepository.DeleteAsync(vendor);
 
             return Unit.Value;
         }
