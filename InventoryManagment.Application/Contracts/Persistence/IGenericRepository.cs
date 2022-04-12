@@ -1,21 +1,23 @@
-﻿namespace InventoryManagment.Application.Persistence.Contracts
+﻿using System.Linq.Expressions;
+
+namespace InventoryManagment.Application.Persistence.Contracts
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task<T> Get(int id);
-        Task<IReadOnlyList<T>> GetAll();
-        Task<T> Add(T entity);
-        Task<T> Update(T entity);
-        Task Delete(T entity);
+        T Get(int id);
+        IReadOnlyList<T> GetAll();
+        T Add(T entity);
+        void Update(T entity);
+        void Delete(T entity);
         bool Exist(int id);
-        bool Any(Func<T, bool> func);
+        bool Any(Func<T, bool> predicate);
         Task<T> GetAsync(int id);
         Task<IReadOnlyList<T>> GetAllAsync();
-        Task<T> AddAsync(T entity);
-        Task<T> UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
+        Task<T> AddAsync(T entity, CancellationToken cancellationToken = default);
+        Task UpdateAsync(T entity);
+        Task DeleteAsync (T entity);
         Task<bool> ExistAsync(int id);
-        Task<bool> AnyAsync(Func<T, bool> func);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
 
     }
 }

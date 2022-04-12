@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace HR.LeaveManagement.Application
+namespace InventoryManagment.Application
 {
     public static class ApplicationServicesRegistration
     {

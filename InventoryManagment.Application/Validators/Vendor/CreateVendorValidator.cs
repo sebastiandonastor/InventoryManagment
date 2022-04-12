@@ -10,7 +10,7 @@ namespace InventoryManagment.Application.Validators
         {
             RuleFor(c => c.Name)
                 .NotEmpty().WithMessage("{PropertyName} must not be empty.")
-                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 125 characters.")
+                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.")
                 .NotNull();
         }
     }
