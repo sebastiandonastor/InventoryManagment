@@ -6,7 +6,7 @@ Inventory Management is a .NET 6.0 Sample Application that has a Clean Architect
 
 
 ```bash
-git clone https://github.com/sebastiandonastor/InventoryManagment
+git clone https://github.com/sebastiandonastor/InventoryManagment.git
 ```
 
 ## Instructions
