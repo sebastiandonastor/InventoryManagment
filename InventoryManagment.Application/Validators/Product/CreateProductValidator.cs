@@ -15,7 +15,11 @@ namespace InventoryManagment.Application.Validators
                 .NotEmpty().WithMessage("{PropertyName} must not be empty.")
                 .MaximumLength(256).WithMessage("{PropertyName} must not exceed 256 characters.")
                 .NotNull()
-                .MustAsync(async (name, token) => !(await _productRepository.AnyAsync(p => p.Name == name)));
+                .MustAsync(async (name, token) => {
+                    var isProductDuplicated = await _productRepository.AnyAsync(p => p.Name == name);
+                    return !isProductDuplicated;
+                })
+                .WithMessage("{PropertyName} '{PropertyValue}' is duplicated. Please write another one.");
 
             RuleFor(c => c.Description)
                 .NotEmpty().WithMessage("{PropertyName} must not be empty.")
