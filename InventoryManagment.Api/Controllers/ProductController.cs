@@ -3,6 +3,7 @@ using InventoryManagment.Application.DTOs.Product;
 using InventoryManagment.Application.Features.Products.Requests;
 using InventoryManagment.Application.Features.Products.Requests.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -37,6 +38,7 @@ namespace InventoryManagment.Api.Controllers
 
         // POST api/<ProductController>
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Post([FromBody] CreateProductDto productDto)
         {
             var command = new CreateProductCommand() { ProductDto = productDto };
@@ -47,6 +49,7 @@ namespace InventoryManagment.Api.Controllers
 
         // PUT api/<ProductController>
         [HttpPut]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Put([FromBody] ProductDto productDto)
         {
             var command = new UpdateProductCommand() { ProductDto = productDto };
@@ -57,6 +60,7 @@ namespace InventoryManagment.Api.Controllers
 
         // DELETE api/<ProductController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> Delete(int id)
         {
             var command = await _mediator.Send(new DeleteProductCommand() { Id = id });
