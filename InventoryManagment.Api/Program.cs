@@ -1,3 +1,4 @@
+using InventoryManagment.Api.Middlewares;
 using InventoryManagment.Application;
 using InventoryManagment.Identity;
 using InventoryManagment.Persistance;
@@ -34,6 +35,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 
 app.UseAuthorization();
