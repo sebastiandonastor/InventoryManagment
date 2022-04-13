@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using InventoryManagment.Application.Contracts.Persistence;
 using InventoryManagment.Application.DTOs.Product;
 using InventoryManagment.Application.Features.Products.Handlers.Commands;
 using InventoryManagment.Application.Features.Products.Requests.Commands;
@@ -16,13 +17,13 @@ namespace InventoryManagment.Application.UnitTests.Products.Commands
 {
     public class CreateProductCommandHandlerTests
     {
-        private readonly Mock<IProductRepository> _mockRepo;
+        private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly IMapper _mapper;
         private readonly CreateProductCommandHandler _handler;
 
         public CreateProductCommandHandlerTests()
         {
-            _mockRepo = MockProductRepository.GetProductRepository();
+            _mockUnitOfWork = MockUnitOfWork.GetUnitOfWork();
 
             var mapperConfig = new MapperConfiguration(c =>
             {
@@ -30,7 +31,7 @@ namespace InventoryManagment.Application.UnitTests.Products.Commands
             });
 
             _mapper = mapperConfig.CreateMapper();
-            _handler = new CreateProductCommandHandler(_mockRepo.Object, _mapper, MockEmailSender.GetEmailSender().Object);
+            _handler = new CreateProductCommandHandler(_mockUnitOfWork.Object, _mapper, MockEmailSender.GetEmailSender().Object, MockHttpContextAccesor.GetContextAccesor().Object);
 
         }
 
@@ -41,7 +42,7 @@ namespace InventoryManagment.Application.UnitTests.Products.Commands
             var result = await _handler.Handle(new CreateProductCommand() { ProductDto = new CreateProductDto { Name = "Dog's seat belt", Description = "A magic seat belt for a dog"  } }, CancellationToken.None);
             result.ShouldBeOfType<CommandResponse>();
 
-            var products = await _mockRepo.Object.GetAllAsync();
+            var products = await _mockUnitOfWork.Object.ProductRepository.GetAllAsync();
 
             products.Count.ShouldBe(4);
         }

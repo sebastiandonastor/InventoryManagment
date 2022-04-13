@@ -1,33 +1,39 @@
 ﻿using AutoMapper;
 using InventoryManagment.Application.Contracts.Infrastructure;
+using InventoryManagment.Application.Contracts.Persistence;
 using InventoryManagment.Application.Features.Products.Requests.Commands;
 using InventoryManagment.Application.Models;
-using InventoryManagment.Application.Persistence.Contracts;
 using InventoryManagment.Application.Responses;
 using InventoryManagment.Application.Validators;
 using InventoryManagment.Domain;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace InventoryManagment.Application.Features.Products.Handlers.Commands
 {
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CommandResponse>
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private IEmailSender _emailSender;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
 
         public CreateProductCommandHandler(
-            IProductRepository productRepository,
+            IUnitOfWork unitOfWork,
             IMapper mapper, 
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IHttpContextAccessor httpContextAccessor)
         {
-            _productRepository = productRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _emailSender = emailSender;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<CommandResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var validator = new CreateProductValidator(_productRepository);
+            var validator = new CreateProductValidator(_unitOfWork.ProductRepository);
             var validationResult = await validator.ValidateAsync(request.ProductDto);
 
             if (!validationResult.IsValid)
@@ -39,17 +45,19 @@ namespace InventoryManagment.Application.Features.Products.Handlers.Commands
                 };
 
             var product = _mapper.Map<Product>(request.ProductDto);
-            await _productRepository.AddAsync(product);
+            await _unitOfWork.ProductRepository.AddAsync(product);
+            await _unitOfWork.Save();
 
-            var email = new Email()
-            {
-                To = "someemail@gmail.com",
-                Body = "Congrats you just created a product :D",
-                Subject = $"Product {product.Name} successfully created"
-            };
             try
             {
-               await _emailSender.SendEmail(email);
+                var emailAddress = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+                var email = new Email()
+                {
+                    To = emailAddress,
+                    Body = "Congrats you just created a product :D",
+                    Subject = $"Product {product.Name} successfully created"
+                };
+                await _emailSender.SendEmail(email);
             }
             catch (Exception)
             {

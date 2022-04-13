@@ -3,7 +3,7 @@ using Moq;
 
 namespace InventoryManagment.Application.UnitTests.Mocks
 {
-    public class MockEmailSender
+    public static class MockEmailSender
     {
         public static Mock<IEmailSender> GetEmailSender()
         {

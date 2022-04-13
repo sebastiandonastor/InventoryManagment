@@ -1,4 +1,5 @@
-﻿using InventoryManagment.Application.Persistence.Contracts;
+﻿using InventoryManagment.Application.Contracts.Persistence;
+using InventoryManagment.Application.Persistence.Contracts;
 using InventoryManagment.Persistance.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,8 +15,9 @@ namespace InventoryManagment.Persistance
                options.UseSqlServer(
                    configuration.GetConnectionString("InventoryManagmentConnectionString")));
 
-
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IVendorRepository, VendorRepository>();
 
