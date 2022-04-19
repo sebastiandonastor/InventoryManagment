@@ -15,12 +15,20 @@ namespace InventoryManagment.Persistance
                options.UseSqlServer(
                    configuration.GetConnectionString("InventoryManagmentConnectionString")));
 
+            #region Repositories
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IVendorRepository, VendorRepository>();
+            #endregion
 
+            #region Caching
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.GetConnectionString("Redis");
+            });
+            #endregion
             return services;
         }
     }
